@@ -1,0 +1,312 @@
+<!DOCTYPE HTML>
+<html>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <style>
+      body {
+          font-family: sans-serif;
+          background-color: #eeeeee;
+        }
+        #loading{position:fixed;top:50%;left:50%;z-index:999;background-color:#fff;padding:15px;border:3px solid #36a5d7;border-radius:9px;-webkit-border-radius:9px;-moz-border-radius:9px;-ms-border-radius:9px;-o-border-radius:9px;border-radius:9px}
+
+        .file-upload {
+        
+          background-color: #ffffff;
+          width: 600px;
+          margin: 0 auto;
+          margin-top:50px;
+          padding: 20px;
+        }
+        
+        .file-upload-btn {
+          width: 100%;
+          margin: 0;
+          color: #fff;
+          background: #1FB264;
+          border: none;
+          padding: 10px;
+          border-radius: 4px;
+          border-bottom: 4px solid #15824B;
+          transition: all .2s ease;
+          outline: none;
+          text-transform: uppercase;
+          font-weight: 700;
+        }
+        
+        .file-upload-btn:hover {
+          background: #1AA059;
+          color: #ffffff;
+          transition: all .2s ease;
+          cursor: pointer;
+        }
+        
+        .file-upload-btn:active {
+          border: 0;
+          transition: all .2s ease;
+        }
+        
+        .file-upload-content {
+          display: none;
+          text-align: center;
+        }
+        
+        .file-upload-input {
+          position: absolute;
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          height: 100%;
+          outline: none;
+          opacity: 0;
+          cursor: pointer;
+        }
+        
+        .image-upload-wrap {
+          margin-top: 20px;
+          border: 4px dashed #1FB264;
+          position: relative;
+        }
+        
+        .image-dropping,
+        .image-upload-wrap:hover {
+          background-color: #1FB264;
+          border: 4px dashed #ffffff;
+        }
+        
+        .image-title-wrap {
+          padding: 0 15px 15px 15px;
+          color: #222;
+        }
+        
+        .drag-text {
+          text-align: center;
+        }
+        
+        .drag-text h3 {
+          font-weight: 100;
+          text-transform: uppercase;
+          color: #15824B;
+          padding: 60px 0;
+        }
+        
+        .file-upload-image {
+          max-height: 200px;
+          max-width: 200px;
+          margin: auto;
+          padding: 20px;
+        }
+        
+        .remove-image {
+          width: 200px;
+          margin: 0;
+          color: #fff;
+          background: #cd4535;
+          border: none;
+          padding: 10px;
+          border-radius: 4px;
+          border-bottom: 4px solid #b02818;
+          transition: all .2s ease;
+          outline: none;
+          text-transform: uppercase;
+          font-weight: 700;
+        }
+        
+        .remove-image:hover {
+          background: #c13b2a;
+          color: #ffffff;
+          transition: all .2s ease;
+          cursor: pointer;
+        }
+        
+        .remove-image:active {
+          border: 0;
+          transition: all .2s ease;
+        }
+        
+        .main{
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+            
+        }
+        .example{
+            text-align:center;
+        }
+        .selec{
+            margin-top:30px;
+            text-align:center;
+            float:center;
+        }
+      .result{
+            text-align:center;
+
+        }
+        .trans{
+            text-align:center;
+            font-size: 50px;
+            
+        }
+        
+    </style>
+    <script type="text/javascript">
+        function readURL(input) {
+            //이미지 새로올리면 리셋
+              $("#result_img").attr("src","");
+              $("#result_text").html("Result");
+              $("#result").hide();
+
+
+
+          if (input.files && input.files[0]) {
+            var reader = new FileReader();
+        
+            reader.onload = function(e) {
+              $('.image-upload-wrap').hide();
+        
+              $('.file-upload-image').attr('src', e.target.result);
+              $('.file-upload-content').show();
+        
+              $('.image-title').html(input.files[0].name);
+            };
+        
+            reader.readAsDataURL(input.files[0]);
+        
+          } else {
+            removeUpload();
+          }
+        }
+        
+        function removeUpload() {
+          $('.file-upload-input').replaceWith($('.file-upload-input').clone());
+          $('.file-upload-content').hide();
+          $('.image-upload-wrap').show();
+        }
+        $('.image-upload-wrap').bind('dragover', function () {
+        		$('.image-upload-wrap').addClass('image-dropping');
+        	});
+        	$('.image-upload-wrap').bind('dragleave', function () {
+        		$('.image-upload-wrap').removeClass('image-dropping');
+        });
+
+
+
+
+        function upload() {
+            var data = new FormData($('#uploadForm').get(0));
+
+            $.ajax({
+                url: "/upload_img",
+                type: "POST",
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    $("#loading").hide();
+                    data = JSON.parse(data)
+
+
+                    if (data.ret == false)
+                        alert("fail : "+data.msg);
+                    else {
+                        $("#result_img").attr("src",data.outfile);
+                        $("#result_text").html("Result");
+                        $("#result").show();
+                        document.body.scrollTop = document.body.scrollHeight;
+                    }
+                },
+                error: function (err) {
+                    $("#loading").hide();
+                    console.log(err);
+                    alert('fail');
+                }
+            });
+            $("#loading").show();
+        }
+
+
+    </script>
+<head>
+    
+</head>    
+<body>
+    <div class="main">
+        <h1>IRON BODY CAPSTONE PROJECT </h1>
+    </div>
+    
+    <div class="example">
+        <caption style="margin-bottom:10px;">
+            <p>1.화면에 얼굴이 대부분을 차지하도록 올려주세요!</p>
+            <p>2.되도록 얼굴이 정면을 향하도록 사진을 찍어주세요!</p>
+            <img src =" /static/input.jpeg">
+            <p>Example</p>
+        </caption>
+{#        <caption>#}
+{#            <p>#}
+{#                output example#}
+{#            </p>#}
+{#            <img src="/static/output.jpeg">#}
+{#        </caption>#}
+    </div>
+    
+    <!-- form tag -->
+
+        
+    <form id="uploadForm" name="uploadForm">
+    <div class="file-upload">
+        <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Add Image</button>
+        
+        <div class="image-upload-wrap">
+            <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" id="upfile" name="upfile"/>
+            <div class="drag-text">
+              <h3>Drag and drop a file or select add Image</h3>
+            </div>
+        </div>
+        <div class="file-upload-content">
+            <img class="file-upload-image" src="#" alt="your image" />
+            <div class="image-title-wrap">
+              <button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">Uploaded Image</span></button>
+            </div>
+        </div>
+    </div>
+
+
+
+    
+    <div class="selec">
+        <h3>Select Gender</h3>
+        <select id="gender" name="gender">
+          <option value="0">Man</option>
+          <option value="1">Woman</option>
+        </select>
+        <h3>Select Age</h3>
+        <select id="age" name="age">
+            <option value="0">0-5</option>
+            <option value="1">6-10</option>
+            <option value="2">11-15</option>
+            <option value="3">16-20</option>
+            <option value="4">21-30</option>
+            <option value="5">31-40</option>
+            <option value="6">41-50</option>
+            <option value="7">51-60</option>
+            <option value="8">61-70</option>
+            <option value="9">71-</option>
+        </select>
+    </div>
+    
+    <div class="trans">
+        <input type="button" style="width:20%" class="file-upload-btn" id="upload_img" value="transform" name="transform" onclick="upload();">
+    </div>
+
+    
+    </form>
+
+<div class ="result" id="result" hidden="hidden">
+            <h3 id="result_text">Result</h3>
+            <img id="result_img" name = "result"/>
+        </div>
+
+<div id="loading" style="display:none;z-index: 10000;"><img src="/static/ajax_loader.gif"></div>
+</body>
+
+</html>

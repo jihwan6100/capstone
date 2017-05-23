@@ -1,0 +1,45 @@
+<!-- Navigation Bar -->
+<script type="text/javascript" src="/static/common_user.js"></script>
+<script type="text/javascript" src="/static/common_all.js"></script>
+<script>
+    function postAjax(json, successFunc, errorFunc) {
+        var errorFunc_temp = default_error_func;
+        var successFunc_temp = default_success_func;
+        if (errorFunc == null)errorFunc_temp = errorFunc;
+        if (successFunc != null)successFunc_temp = successFunc;
+        json["csrfmiddlewaretoken"] = '{{csrf_token}}';
+        $.ajax({url : "/web/ajax/", type : "POST", dataType : "json",
+                success : successFunc_temp, error : errorFunc_temp,
+                data : json});
+    }        
+</script>
+
+<nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+	<!-- Brand and toggle get grouped for better mobile display -->
+	<div class="navbar-header">
+    {% if signin %}
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+    {%  endif %}
+		<a class="navbar-brand" href="/">{{msg_map.TXT_SERVICE_NAME}}</a>
+	</div>
+	{% if signin %}
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav">
+            {% if partner %}
+            {%endif%}
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="/web/signout/">{{ip}}/{{name}}&nbsp;sign out</a>
+            </li>
+        </ul>
+    </div><!-- /.navbar-collapse -->
+    {%  endif %}
+</nav>
+<div id="loading" style="display:none;z-index: 10000;"><img src="/static/ajax_loader.gif"></div>
+<!-- Navigation Ends -->
