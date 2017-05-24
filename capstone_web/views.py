@@ -110,7 +110,7 @@ def make_image(file_path, age, gender) :
         model.make_output(file_path,age,gender,checkpoint_dir, output_path, file_name_10_10)
 
         #10*10 output
-        return '/static/outputs/output.png'
+        return '/static/outputs/'+file_name_10_10
 
         #1*1 output
         file_name = time.strftime("%Y%m%d%H%M%S")+".png"
