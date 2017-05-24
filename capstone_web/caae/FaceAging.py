@@ -733,7 +733,7 @@ class FaceAging(object):
             return False
 
 
-    def make_output(self, img_path, age, gender, checkpoint_dir,output_path):
+    def make_output(self, img_path, age, gender, checkpoint_dir,output_path, file_name):
         if not self.load_checkpoint2(checkpoint_dir):
             print("\tFAILED >_<!")
             exit(0)
@@ -768,11 +768,11 @@ class FaceAging(object):
             gender_female[i, 1] = self.image_value_range[-1]
 
         if gender == 0:
-            self.gen_100_img(images, gender_male, output_path,'output.png')
+            self.gen_100_img(images, gender_male, output_path,file_name)
         else :
-            self.gen_100_img(images, gender_female, output_path,'output.png')
+            self.gen_100_img(images, gender_female, output_path,file_name)
 
-        print '\n\tDone! Results are saved as %s\n' % os.path.join(self.save_dir, 'test', 'test_as_xxx.png')
+        # print '\n\tDone! Results are saved as %s\n' % os.path.join(self.save_dir, 'test', 'test_as_xxx.png')
 
     def gen_100_img(self, images, gender, output_path, file_name):
         test_dir = output_path

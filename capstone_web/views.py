@@ -61,9 +61,15 @@ def upload_img(request):
                 im = Image.open(file_path)
                 bg = Image.new("RGB", im.size, (255, 255, 255))
                 bg.paste(im, im)
+                bg = bg.resize((200, 200), Image.ANTIALIAS)
                 bg.save(file_path+".jpg")
             else :
                 os.rename(file_path, file_path+".jpg")
+
+                im = Image.open(file_path+".jpg")
+                im = im.resize((200, 200), Image.ANTIALIAS)
+                im.save(file_path+".jpg")
+
 
             file_path = file_path+".jpg"
 
@@ -99,14 +105,16 @@ def make_image(file_path, age, gender) :
         print('\n\tTesting Mode')
         checkpoint_dir = os.path.join(settings.PROJECT_PATH, "caae/save/checkpoint")
         output_path = os.path.join(settings.PROJECT_PATH, "static/outputs")
-        model.make_output(file_path,age,gender,checkpoint_dir, output_path)
+
+        file_name_10_10 = time.strftime("%Y%m%d%H%M%S") + ".png"
+        model.make_output(file_path,age,gender,checkpoint_dir, output_path, file_name_10_10)
 
         #10*10 output
         return '/static/outputs/output.png'
 
         #1*1 output
         file_name = time.strftime("%Y%m%d%H%M%S")+".png"
-        img = Image.open(os.path.join(output_path,'output.png'))
+        img = Image.open(os.path.join(output_path,file_name_10_10))
         img2 = img.crop((age*128, gender*128, 128, 128))
         img2.save(os.path.join(output_path,file_name))
         return "/static/outputs/"+file_name
