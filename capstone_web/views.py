@@ -62,13 +62,14 @@ def upload_img(request):
                 bg = Image.new("RGB", im.size, (255, 255, 255))
                 bg.paste(im, im)
                 bg = bg.resize((200, 200), Image.ANTIALIAS)
-                bg.save(file_path+".jpg")
+                bg.save(file_path+".jpg", quality=70)
+                os.remove(file_path)
             else :
                 os.rename(file_path, file_path+".jpg")
 
                 im = Image.open(file_path+".jpg")
                 im = im.resize((200, 200), Image.ANTIALIAS)
-                im.save(file_path+".jpg")
+                im.save(file_path+".jpg", quality=70)
 
 
             file_path = file_path+".jpg"
