@@ -112,11 +112,12 @@ def make_image(file_path, age, gender) :
 
 
 
-        #1*1 output
         file_name = time.strftime("%Y%m%d%H%M%S")+".png"
         img = Image.open(os.path.join(output_path,file_name_10_10))
+        # 1*10
         # img2 = img.crop((0, 0, 128, 1280))
-        img2 = img.crop((0, age * 128, 128, 128))
+        #1*1
+        img2 = img.crop((0, age * 128, 128, age * 128+128))
         img2.save(os.path.join(output_path,file_name))
         return "/static/outputs/"+file_name
 
