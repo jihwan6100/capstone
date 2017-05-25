@@ -110,13 +110,13 @@ def make_image(file_path, age, gender) :
         file_name_10_10 = time.strftime("%Y%m%d%H%M%S") + ".png"
         model.make_output(file_path,age,gender,checkpoint_dir, output_path, file_name_10_10)
 
-        #10*10 output
-        return '/static/outputs/'+file_name_10_10
+
 
         #1*1 output
         file_name = time.strftime("%Y%m%d%H%M%S")+".png"
         img = Image.open(os.path.join(output_path,file_name_10_10))
-        img2 = img.crop((age*128, gender*128, 128, 128))
+        # img2 = img.crop((0, 0, 128, 1280))
+        img2 = img.crop((0, age * 128, 128, 128))
         img2.save(os.path.join(output_path,file_name))
         return "/static/outputs/"+file_name
 
